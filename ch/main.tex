@@ -66,15 +66,17 @@
 
 \begin{titlepage}
   \begin{center}
-    \vspace*{5.5cm}
-    \includegraphics[scale=0.5]{../common/logo.png}
-    \vspace{0.5cm}
+    \vspace*{2.5cm}
+    \includegraphics[scale=0.2]{../common/logo.png}\\
+    \includegraphics[scale=0.2]{../common/yeez.png}
+
+    \vspace{3.5cm}
 
 
    \textbf{\huge{\zk 介绍}}
 
-    \vspace{0.5cm}
-    ASResearch\\曾驭龙
+    \vspace{2.5cm}
+    ASResearch\\YeeZTech
     \textbf{}
   \end{center}
 
@@ -109,13 +111,13 @@ $[n]$表示集合$\{1,2,...,n\}$
 \subsection{参考资料}
 这里先介绍参考资料，其内容包含比本文更详尽的介绍。本文大部分内容源于下述材料的结合。
 \begin{enumerate}
-	\item ZkSNARK原始论文：“Pinocchio: Nearly Practical Verifiable Computation”	Bryan Parno Jon Howell, Craig Gentry Mariana Raykova 
+	\item ZkSNARK原始论文：“Pinocchio: Nearly Practical Verifiable Computation”	Bryan Parno Jon Howell, Craig Gentry Mariana Raykova
 	\item QAP原始论文：“Quadratic Span Programs and Succinct NIZKs without PCPs” Rosario Gennaro, Craig Gentry, Bryan Parno, Mariana Raykova
 	\item 最详尽的ZkSNARK解读报告：“Why and How zk-SNARK Works: Definitive Explanation”	Maksym Petkus
 	\item V神对ZkSNARK的介绍三部曲（第三部，含前两部链接，分别介绍pairing和QAP）：
 	\newline
 	https://medium.com/@VitalikButerin/zk-snarks-under-the-hood-b33151a013f6L
-	\item 主要从P与NP角度介绍QSP，“zkSNARKs in a nutshell” 
+	\item 主要从P与NP角度介绍QSP，“zkSNARKs in a nutshell”
 	\newline
 	https://blog.ethereum.org/2016/12/05/zksnarks-in-a-nutshell/
 	\item ZCash团队对\zk 的介绍，分7个小章节。
@@ -210,7 +212,7 @@ $$E(h(s))=E(s^3)+2E(s^2)+3E(s^1)$$
 为了只对$p(x)$做限制而不限制$h(x)$，我们需要引入下面的密码学假设。
 \begin{assumption}[KEA, Knowledge-of-Exponent Assumption]
 	给定一组$a,a'$满足$a'= a^\alpha$（这个$a'$称作偏移量），在不知道$\alpha$的情况下，如果有人能够给出另外一组数$(b,b')$使得$b'= b^\alpha$，那么一定有$b=a^c$。
-	
+
 	该假设还有扩展形态：给定若干组$(a_1,a_1'),...,(a_n,a_n')$满足$a_i'=a_i^\alpha$，如果有人能够给出另外一组数$(b,b')$使得$b'= b^\alpha$，那么一定有$b=a_1^{c_1}a_2^{c_2}...a_n^{c_n}$。（即$b$一定是$a_i$的指数线性组合）
 \end{assumption}
 KEA这个假设的意思是，由于无法算出$\alpha$的真实值，若要产生一组指数差距也为$\alpha$的数，其唯一方式是通过已给出的，满足指数差距为$\alpha$的数字来计算
@@ -276,7 +278,7 @@ $$e(E(t(s)),E_h)=e(g^{t(s)},g^{h(s)})=e(g,g)^{t(s)h(s)}, e(E_p,g)=e(g^{p(s)},g)=
 \begin{remark}
 \label{shift}
 	上述协议在实现公开化的同时又引入了新的问题：由于验证钥匙$E(\alpha)$对于\pp 也是可见的，这相当于\pp 自动获得了常数项的偏移量！即\pp 可以忽视不允许使用常数项的限定条件。
-	
+
 	解决这个问题的思路为将验证钥匙$E(\alpha)$进一步拆分成$E(\gamma)$和$E(\beta\gamma)$，让\pp 无法从验证钥匙获得常数项的偏移量。具体的协议介绍我们留到之后介绍。
 \end{remark}
 该协议在完全公开的情况下实现了验证目的，但有个缺陷是仍然需要第三方的trusted setup：\zk 要求第三方在setup完成后要彻底销毁$\alpha$和$s$以免造成暴露，而一旦暴露任何人都可以伪造证明。但不能保证第三方有意或无意的没有进行销毁。为了降低这个风险，\zk 采用的方式是由多个人共同实现setup，每个人以自己的私钥（$\alpha,s$）和前一个人生成的CRS作为输入生成一个新的CRS。经过$n$个人这么做之后，只要保证$n$个人中至少有一个人彻底销毁了私钥即能保证最终的CRS是安全的。具体方式本文不多做介绍，见参考资料。无论如何，对trusted setup的依赖算是\zk 的缺陷之一，尽管有很多区块链项目采用了这种做法，但仍需付出成本以及损失去中心化程度。后续提出的新方案zkSTARK等可以不依赖这个过程。
@@ -320,7 +322,7 @@ R1CS是Rank-1 Constraint System的缩写，它将一个复杂的方程统一成�
 	\item 我们首先要引入若干中间变量，将原方程转化成若干方程组，其中方程组的每个方程都是
 	$$({\color{red}\mbox{若干变量相加}}) \times ({\color{green}\mbox{若干变量相加}}) = ({\color{blue}\mbox{若干变量相加}})$$
 	的形式。
-	
+
 	对于上述例子，我们需要引入中间变量$e$，同时将原方程转化成下面方程组
 	$$\begin{cases}
 	    {\color{red}a} \times {\color{green}b} = {\color{blue}e}\\
@@ -329,23 +331,23 @@ R1CS是Rank-1 Constraint System的缩写，它将一个复杂的方程统一成�
 
 	这其实是将一个计算过程转化成一个算术电路的过程，其中，带三个颜色的部分分别称作电路一个门的左输入，右输入和输出。为了节省画图，我们仍用方程的形式来说明。
 	\item 随后，我们需要对上述方程组中的每一个方程（即，每一个电路门）都生成三个向量（分别称作左向量，右向量和出向量），其维度为不同变量的数目（例子中为5个，每一维分别对应$a,b,c,d,e$）。记方程组方程的数目为$n$。记$\bm{l}_i,\bm{r}_i,\bm{o}_i),i \in [n]$分别为第$i$个方程对应的左向量，右向量和出向量。用向量$\bm{v}=(v_1,...,v_m)$表示$m$个变量组成的向量（例如，$\bm{v}=(a,b,c,d,e)$），这些向量的构造方式如下：
-	
+
    \textbf{对于第$i\in [n]$，$j \in [m]$。如果变量$v_j$出现在了第$i$个方程组的左/右/出位置，则将$\bm{l}_i/\bm{r}_i/\bm{o}_i$第$j$维置为1，否则置为0。}
-   
+
    对于上述例子，$i=2,j=5$，不难得出构造的向量如下（变量$a$对应向量的第一位）：
    \begin{align*}
        & \bm{l}_1=(1,0,0,0,0),\bm{r}_1=(0,1,0,0,0),\bm{o}_1=(0,0,0,0,1)\\
        & \bm{l}_2=(1,0,1,0,0),\bm{r}_2=(0,0,0,0,1),\bm{o}_2=(0,0,0,1,0)
    \end{align*}
    \item 下一步，定义这些变量的好处是啥？我们考察$\bm{v}$与上述向量的内积（$\circ$表示内积）。
-   
+
    通过观察，或者直接根据定义，我们发现，$\bm{v}\circ\bm{l}_i$恰好是第$i$个方程的红色（左输入）部分！（对于$\bm{v}\circ\bm{r}_i,\bm{v}\circ\bm{o}_i$结论相同，对应绿色和蓝色部分）。所以，整个方程组可以用向量表达成下面形式：
    \begin{align}
    \label{R1CS}
    (\bm{v}\circ \bm{l}_i)\cdot (\bm{v}\circ \bm{r}_i) = (\bm{v}\circ \bm{o}_i),i \in [n],
    \end{align}
    故\pp 证明知道原方程的解等价于\pp 证明知道一个向量$\bm{v}$是的上述方程组成立。
-   
+
    $n$组向量$(\bm{l}_i,\bm{r}_i,\bm{o}_i)$构成$n$个满足特定形式的方程（电路门），这就是所谓的R1CS。
 \end{enumerate}
 \subsection{QAP}
@@ -360,11 +362,11 @@ R1CS是Rank-1 Constraint System的缩写，它将一个复杂的方程统一成�
 上一章提到，我们一共有$3n$个向量，一组$(\bm{l}_i,\bm{r}_i,\bm{o}_i)$对应一个限制条件，每个向量有$m$维。我们现在按照下面的规则来构造多项式
 \begin{enumerate}
 	\item 我们将分别针对左，右和出构造$m$个多项式，一共$3m$个。一下我们均以左位置为例：基于向量$\bm{l}_i,i \in [n]$，对于每个$j \in [m]$，构造$n-1$次多项式$L_j(x)$满足
-	
+
 	\textbf{$L_j(x)$在$z_i$处的取值为$\bm{l}_i^{(j)}$，其中$z_i,i=1,2,...,n$为任意$n$个不同的数（实际就可取$z_i=i$）}。
-	
+
 	根据上述性质，多项式是唯一确定的，即点集$\{i \in [n]|(z_i,\bm{l}_i^{(j)})\} \in L_j(x)$。   （向量上标$(j)$表示该向量的第$j$维元素）
-	
+
 	举例如下：
   \begin{tabular}{c|c|c|c|c|c|}
   	\label{tab:1}
@@ -380,18 +382,18 @@ R1CS是Rank-1 Constraint System的缩写，它将一个复杂的方程统一成�
   	  $(z_1,$   &  0    & 0& 0& 0& 1\\
   	  $(z_2,$  &  0  &   0 & 0 & 1 & 0 \\
   	  &   $O_a(x)$&$O_b(x)$&$O_c(x)$&$O_d(x)$&$O_e(x)$
-  \end{tabular}	
+  \end{tabular}
 
 	（即，当要获得第$i$个向量在第$j$维的值，我们只需要计算多项式$L_j(x)$在$z_i$点的取值。）
-	
+
 	对于右位置和出位置，我们同样方式构造出$R_j(x),O_j(x), j \in [m]$
-	
+
 	\item 一旦有了这些多项式$L_j(x),R_j(x),O_j(x)$（这些多项式在本文之后都会被当做common knowledge，因为原问题的计算过程是公开的），上一章的R1CS限制\ref{R1CS}就转变为下面的形式：
 	$$ (\sum_{j \in m} L_j(x)v_j)\times (\sum_{j \in m} R_j(x)v_j) = \sum_{j \in m} O_j(x)v_j$$
 	对于所有$x=z_1,z_2,...,z_n$均成立。
-	
+
 	此时我们可以巧妙地利用多项式的性质，如果我们把上面等式（左边-右边）看做一个整体的多项式，则这个多项式在$z_i$每一点都等于0，这意味着该多项式能够被$(x-z_1)...(x-z_n)$整除！这下就和前面证明知道一个多项式被另一个整除的思想结合了。
-	
+
 	所以，如果记$L(x)=\sum_{j \in m} L_j(x)\times v_j$ （类似定义$R(x),O(x)$，为\pp 提供的证明的一部分），则R1CS限制（\ref{R1CS}）能转化为下面的问题：
 	\textbf{
 	\begin{itemize}
@@ -401,9 +403,9 @@ R1CS是Rank-1 Constraint System的缩写，它将一个复杂的方程统一成�
      }
      这就是所谓的QAP（quadratic arithmetic program）。
      \item 现在\pp 的任务为，基于给定的$L_j(x),R_j(x),O_j(x),j \in [m],t(x)$，提供合法的$L(x),R(x),O(x),h(x)$满足QAP的两个限制条件。
-     
+
      这里我们继续用（\ref{tab:1}）的结果来举例。
-     
+
      不妨设$z_1=1,z_2=2$，通过简单的计算不难算出，
      $$L_a(x)=1, L_b(x) = 0, L_c(x) = x-1, L_d(x)= 0,L_e(x)=0$$
      $$R_a(x)=0,R_b(x)=2-x,R_c(x)=0,R_d(x)=0,R_e(x)=x-1$$
@@ -431,7 +433,7 @@ R1CS是Rank-1 Constraint System的缩写，它将一个复杂的方程统一成�
 	         对右输入，输出部分同理。
 	 \item 如果有些方程存在多个独立的常数项，例如$(12345+88888+a)\times b = c $，正常来说（任何人）可以把这若干个常数直接加起来变成新的，但如果连常数的加法也不愿意做，这时可以将常数多项式$L_0(x)$等拆分成多个，每个的取值对应一个常数输入项。
 	 \item 根据参考资料中介绍，\zk 甚至支持有一部分输入甚至可以由\vv 来制定！即，协议定义若干公共多项式$L'_j(x)$，针对那些由\vv 指定的变量。在计算$L(x)$时，将$L'_j(x)v'_j$作为添加项加在原$L(x)$的后面，其中$v'_j$为\vv 给出的变量值，\pp 无法改变。这个功能的引入大大增加了协议的鲁棒性。
-	 
+
 	 为方便起见，本文将省略\vv 指定变量的情形，且只引入三个常数多项式$L_0(x),R_0(x),O_0(x)$。
 \end{itemize}
 
@@ -456,7 +458,7 @@ R1CS是Rank-1 Constraint System的缩写，它将一个复杂的方程统一成�
 \begin{itemize}
 	\item 首先我们将在下文提到，上述数据交互均是以同态加密过的，其关键在于，\textbf{\pp 无法获取$\beta_l,\beta_r,\beta_o$的值}。（如果是非加密的数据交互，我们可以从线性组合后的向量推断出组合系数，但是对于加密后的数据不行）。
 	\item \pp 要提供$L,R,O$的线性组合但他不知道具体的系数，他只能通过给定的向量$\beta_l\bm{l}+\beta_r\bm{r}+\beta_o\bm{o}$来做文章。但由于其中涉及的系数也是不知道的，他唯一能做的就是取一个$v'$对这个向量做一次内积$(\beta_l\bm{l}+\beta_r\bm{r}+\beta_o\bm{o})\circ \bm{v}'$ 然后期望结果能通过验证。
-	
+
 	假设\pp 用了不同的$\bm{v}$对给定向量做内积，设为$\bm{v}_1,\bm{v}_2,\bm{v}_3$，那么想要验证通过的话要求
 	$$ \beta_l \bm{v}_1\circ \bm{l}+\beta_r \bm{v}_2\circ \bm{r}+\beta_o \bm{v}_3\circ \bm{o} = (\beta_l\bm{l}+\beta_r\bm{r}+\beta_o\bm{o})\circ \bm{v}'$$
 	由于$\beta_l,\beta_r,\beta_o$是随机给定，上述成立要求$ \bm{v}_1=\bm{v}', \bm{v}_2=\bm{v}',\bm{v}_3=\bm{v}'$。\footnote{不同的随机数可以看做不同的维度向量，好比两个复数$a+bi$和$c+di$相等必须$a=c,b=d$。同样，上式左右相等必须$\beta_l$的左右两边的系数相同，这等价于存在向量$\bm{v}_1-\bm{v}'$与$\bm{l}$正交。对于普通数据求出正交向量并不难，然而对于协议中使用到的加密数据，获得这个正交向量也是不可解的（否则CDH假设被攻破）。所以\pp 让等式成立只能$\bm{v}_1=\bm{v}'$。}
@@ -469,14 +471,14 @@ R1CS是Rank-1 Constraint System的缩写，它将一个复杂的方程统一成�
 	\item Setup过程：
 	\begin{itemize}
 	   \item  随机选择$s$以及偏移量系数$\alpha_l,\alpha_r,\alpha_o$ (代替之前只选择一个$\alpha$)以及一致性系数$\beta_l,\beta_r,\beta_o$。
-	   \item 计算证明钥匙	   
+	   \item 计算证明钥匙
 	   \begin{align*}
 	    &\big( \{E(s^k)\}_{k=\{0,1,...,d\}}, \\
 	    & \{E(L_j(s)),E(R_j(s)),E(O_j(s)),E(\alpha_l L_j(s)), E(\alpha_r R_i(s)),E(\alpha_o O_j(s))\}_{j \in [m]}\\
 	    & \{ E(\beta_l L_j(s)+\beta_r R_j(s)+\beta_o L_j(s))\}_{j \in [m]} \big)
 	   \end{align*}
-	   上式最后一项即为随机线性组合后的结果。   
-	   	   \item 计算验证钥匙	 
+	   上式最后一项即为随机线性组合后的结果。
+	   	   \item 计算验证钥匙
 	   	   $$(E(\alpha_l),E(\alpha_r),E(\alpha_o),E(\beta_l),E(\beta_r),E(\beta_o))$$
 	 \end{itemize}
      \item 证明过程：
@@ -520,14 +522,14 @@ R1CS是Rank-1 Constraint System的缩写，它将一个复杂的方程统一成�
 	\end{itemize}
 	\item 证明过程：不变
 	\item 验证过程：
-	
+
    将一致性验证改为
   $$e(E_l,E(\beta_l\gamma))e(E_r,E(\beta_r\gamma))e(E_o,E(\beta_o\gamma))=e(E_z,E(\gamma))$$
  这样由于\pp 无法获知$E(\beta_l)$的值，他无法给$L(x)$添加合法的常数项以通过验证。
 \end{itemize}
 
  {\color{red}值得一提的是我们应该排除多项式为常数多项式的情况：假设$L_1(x)=1,R_1(x)=0,O_1(x)=0$，那么证明钥匙$E(\beta_l L_i(s)+\beta_r R_i(s)+\beta_o L_i(s))$将直接等于$E(\beta_l)$，等同于本该隐藏的$E(\beta_l)$暴露了。
- 
+
  如何排除这种情况呢（因为变量很稀疏这种情况还挺常见）？或许可以添加一个无用的电路门，包含所有变量作为输入，强行扰动原有的差值多项式}
 
 因为一致性验证条件已经保证了$E(L(x))$等不能随便添加常数项，我们不需要对$E(\alpha_l)$等验证钥匙再做调整（如变成$E(\alpha_i \gamma)$）。
@@ -703,76 +705,76 @@ $$ (g_l^{L(s)},g_r^{R(s)},g_o^{O(s)}, g_l^{\alpha_l L(s)},g_l^{\alpha_r R(s)},g_
 	\item 加减乘运算用上文的技巧已经可以构造。对于除法运算，$a \div b=c$，可以考虑先转化成乘法的式子$b \cdot c=a$再进行构造。
 	\item 对于证明一个数$a$是0或1，引入限制条件$a(a-1)=0$即可。
 	\item 对于范围证明，如证明$0 \leq a \leq 15$，引入限制新变量$a=8a_3+4a_2+2a_1+1a_0$以及限制条件$a_i(i=1,2,3,4)$属于0或1即可。对于更大范围的范围证明同理，先引入二进制拆分变量$a_i$，再添加属于0或1的限制（注意到$2^i$这些项是常数）。
-	
+
 	以下我们假设所有变量的取值相比于质数$p$以及群的阶$q$都在一个很小的范围。（一般而言，$p,q$为$2^{256}$级别，而变量的取值最高为$2^{32}$。且我们暂时忽略变量为负数的情形。）
-	
+
 	 \textbf{注意到这里排除了变量为负数的情形，否则它模$q$意义下超出合理取值。对于允许绝对值在一定范围的负数变量的场景，如$a\in [-10^9,10^9]$，我们需要先对这些变量做一次变换$a'=a+10^9$，然后仍然用$[0,2^{32})$这个范围来限定所有变量。}
-	
+
 	基于范围证明也可以做大小比较。比如证明$a>b$，只需要证明$a-b$在合理取值范围（如0至$2^{32}$）即可。
-	
+
 	\item 对于证明$a$被$b$整除，简单的提供$c$满足$c\cdot b=a$可能不行，因为即使$b$不整除$a$，在群的阶运算意义下也会存在这样的$c$满足条件（本质上是$bc \mod q=a$）。
-	
+
 	解决方案对$c$添加一个合理取值范围证明），因为如果$b$不整除$a$且$bc \mod q =a$，那么$b$或$c$至少有一个大于$\sqrt{q}$，矛盾。
 	\item 基于以上对于取余或整除函数我们也能构造：比如$a \mod b =r$，提供变量$k$，以及限制条件$a=bk+r$，$k$在合理取值范围，$r$在$[0,b)$之间的证明即可。
 	\item 对于指数函数（$f(x)=a^x$），我们先考虑指数是常数的情况，如$a^8=b$。
-	
+
 	一个简单的构造方式为，引入新变量及限制方程：$a_2=a\cdot a,a_3=a_2\cdot a,...,a_7=a_6\cdot a,b=a_7\cdot a$，但这样变量的总数为$8$的线性级别，不具有实用性。
-	
+
 	这里只需引入二分求幂的思想即可简化上述过程：$a_2=a\cdot a, a_4=a_2\cdot a_2,b=a_4\cdot a_4$，即只需要引入下标为二次幂的变量。这样变量的总数为$8$的对数级别，可以实际使用。
-	
+
 	对于指数不是2次幂的情形，只需将其做二进制拆分然后对每一位分别构造即可。
-	
+
 	\item 对于指数为变量的情形，如$a^b=c$。如果仍然直接使用二分求幂的构造，则人们可以通过执行的次数来推断出$b$的值，这样就暴露了信息。
-	
+
 	为了不暴露$b$的信息，我们先考虑一种简单情况。如果$b$的取值只能是0或1，那么方程可以用章节\ref{sec:example}中介绍的将判断函数转化成方程的情形：
 	$$ c= ab+(1-b), b(b-1) = 0$$
 	如果范围稍微扩大，$b$可以等于$0,1,2,3$，我们引入若干中间变量也能实现：
 	$$a_1=a\cdot a, b=2b_1+b_0, c=a_1b_1+ab_0, b_0(b_0-1)=0, b_1(b_1-1)=0$$
 	因为上述方程总是包含了$b_0,b_1$且别人不知道其具体值，他们只能知道$b$是0到4这个范围内但不知道$b$具体是哪个数。
-	
+
 	上式可以推广到一般情形，先将$b$在合理范围内给出二进制拆分$b_{31}b_{30}...b_0$，同时，构造方程$a_k=a^{2^k},k=0,...,31$。这一项可以通过上面介绍的指数为常数的情形来构造，且显然对不同的$k$构造能复用。（具体略）最后构造方程
 	$$c= a_{31}b_{31}+a_{30}b_{30}+...+a_0b_0$$
 	有了指数函数，我们已经可以对Bob Jenkins'96 bit Mix Function这一简化哈希函数做\zk。
 	\item 对于一般的判断函数情形：
-	
+
 	这里列举一些常见用法：
-	\begin{itemize} 
+	\begin{itemize}
     \item	$$if~~a=5~~then~~\mbox{表达式1}~~else~~\mbox{表达式2}$$
      首先如果限定$a$只能是0或5，构造方程 $$c=\frac{(5-a)}{5}\mbox{表达式2}+\frac{a}{5}\mbox{表达式1}$$即可。
-     
+
      如果不对$a$做取值限定，且不能暴露$a$的值呢？（\textbf{并且，最重要的，不能暴露$a$是不是等于0！即，需要隐藏程序是按照哪个分支来执行的信息}）我们下面介绍不做其他限定的判断函数。
      \item $$if~~a=0~~then~~\mbox{表达式1}~~else~~\mbox{表达式2}$$
      需要已知限定条件：$a$在合理的取值范围（$0$至$2^{32}$）。
-     
+
      我们需要构造一个变量$b$，在$a = 0$时取值为1否则为0。
-     
+
      将$a$做二进制拆分$a_{31}...a_0$，构造
      $$b=(1-a_{31})(1-a_{30})...(1-a_1)$$即可。
-     
+
      构造完$b$之后，构造方程$$(1-b)\mbox{表达式2}+b\mbox{表达式1}$$
     % \item 条件$a>0$在我们的假设条件下等价于$a \neq 0$
-     
+
      \item 对于允许$a$为负数情形，且需要隐藏正负号怎么处理呢？（注意到虽然我们修改了原始数据不能为负数，但出现在判断条件里的可能是中间变量，如$a-b$，在判断相等时需要使用。）
-     
+
      需要已知限定条件：$a$的绝对值在合理范围内（这是合理的假设，因为$a,b$都正常取值时$a-b$绝对值不会超过合理范围）。
-          
+
      解决方案：强行还原出$a$的绝对值：引入变量及限制$c=a\cdot a, b\cdot b =c$，$b$在合理范围内（$b \in [0,2^{32})$）。对$b$按照上面方案（判断条件$a=0$）构造证明。
-     
+
        Pinocchio（参考资料[1]）给出了更为巧妙的构造。上述$b=(a!=0)?1:0$的取值可以仅由两个方程决定：
      $$a(1-b)=0, aM-b=0$$
      其中$M$为\pp 提供的新变量。显然，如果$a\neq 0$则$b$一定为1，且$M$能够置为$M=1/a$使上式成立。反之如果$a=0$则$b$也一定为0，$M$可以为任何数。
-     
+
      \item   $$if~~a>0~~then~~\mbox{表达式1}~~else~~\mbox{表达式2}$$
      需要已知限定条件：$a$的绝对值在合理范围内。
-     
+
      注意到我们仍然不能暴露$a$是否大于0。笔者能想到的一个解决方案如下：
-     
+
      （如上）构造$c=a\cdot a, b \cdot b =c$，$b$在合理范围内（$b \in [0,2^{32})$），即$b=|a|$
-     
+
      (如上)构造$c_1= (a!=b)?1:0$，对应$a<0$的情形，$c_2= (-a!=b)?1:0$，对应$a>0$的情形。（注意到此时只有$\pm a=b$两种情形）
-     
+
      注意到，此时还有$a=0$的情形，对应$c_1,c_2$都等于0。我们再引入$c_3= (a=0)?1:0$
-     
+
      构造$d=c_2\mbox{表达式1}+c_1\mbox{表达式2}+c_3\mbox{表达式2}$
   	\end{itemize}
     至此大部分判断函数已经解决。
